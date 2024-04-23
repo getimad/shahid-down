@@ -8,17 +8,18 @@
         All,
         Tv,
         Movie,
-        Ona
+        Ona,
+        Special
     }
 
     /// <summary>
-    /// Represents an anime with its details.
+    /// Represents an anime.
     /// </summary>
     public class Anime
     {
         public int Id { get; set; }
         public required string Title { get; set; }
         public AnimeType Type { get; set; }
-        public int Episodes { get; set; } 
+        public required string Status { get; set; }
     }
 }

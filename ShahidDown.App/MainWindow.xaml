@@ -5,49 +5,61 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShahidDown.App"
         mc:Ignorable="d"
-        Title="Shahid Down v1.0" Height="450" Width="800" ResizeMode="CanMinimize">
-    <StackPanel Margin="10">
-        <!-- Search -->
-        <GroupBox Header="Search"
-                  Padding="5">
-            <DockPanel Height="26">
-                <Button x:Name="SearchButton"
-                        Content="Search"
-                        Width="100"
-                        Margin="5,0"
-                        DockPanel.Dock="Right"/>
-                <TextBox x:Name="SearchInput"
-                         VerticalContentAlignment="Center"
-                         VerticalAlignment="Stretch"
-                         Padding="3,0,0,0"/>
-            </DockPanel>
-        </GroupBox>
-        
-        <!-- Anime List -->
-        <GroupBox Header="Anime List"
-                  Padding="5">
-            <ListView x:Name="AnimeList"
-                      Margin="5"
-                      Height="200">
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridView.Columns>
-                            <GridViewColumn Header="Id"
-                                            Width="35"
-                                            DisplayMemberBinding="{Binding Id}"/>
-                            <GridViewColumn Header="Title"
-                                            Width="490"
-                                            DisplayMemberBinding="{Binding Title}"/>
-                            <GridViewColumn Header="Type"
-                                            Width="100"
-                                            DisplayMemberBinding="{Binding Type}"/>
-                            <GridViewColumn Header="Episodes"
-                                            Width="100"
-                                            DisplayMemberBinding="{Binding Episodes}"/>
-                        </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </GroupBox>
-    </StackPanel>
+        Title="Shahid Down v1.0" Height="450" Width="900" ResizeMode="CanMinimize">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0"
+                    Margin="10" >
+            
+            <!--Search-->
+            <GroupBox Header="Search"
+                      Padding="5">
+                <DockPanel Height="26">
+                    <Button x:Name="SearchButton"
+                            Content="Search"
+                            Width="100"
+                            Margin="5,0"
+                            DockPanel.Dock="Right"/>
+                    <TextBox x:Name="SearchInput"
+                             VerticalContentAlignment="Center"
+                             VerticalAlignment="Stretch"
+                             Padding="3,0,0,0"/>
+                </DockPanel>
+            </GroupBox>
+
+            <!--Anime List-->
+            <GroupBox Header="Anime List"
+                      Padding="5">
+                <ListView x:Name="AnimeList"
+                          Margin="5"
+                          Height="250">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridView.Columns>
+                                <GridViewColumn Header="Id"
+                                                Width="35"
+                                                DisplayMemberBinding="{Binding Id}"/>
+                                <GridViewColumn Header="Title"
+                                                Width="295"
+                                                DisplayMemberBinding="{Binding Title}"/>
+                                <GridViewColumn Header="Type"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding Type}"/>
+                                <GridViewColumn Header="Status"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding Status}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+    
+
 </Window>
