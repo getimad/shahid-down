@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShahidDown.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="Shahid Down v1.0" Height="450" Width="800" ResizeMode="CanMinimize">
+    <StackPanel Margin="10">
+        <!-- Search -->
+        <GroupBox Header="Search"
+                  Padding="5">
+            <DockPanel Height="26">
+                <Button x:Name="SearchButton"
+                        Content="Search"
+                        Width="100"
+                        Margin="5,0"
+                        DockPanel.Dock="Right"/>
+                <TextBox x:Name="SearchInput"
+                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Stretch"
+                         Padding="3,0,0,0"/>
+            </DockPanel>
+        </GroupBox>
+    </StackPanel>
 </Window>
