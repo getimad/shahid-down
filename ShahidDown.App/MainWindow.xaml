@@ -22,5 +22,32 @@
                          Padding="3,0,0,0"/>
             </DockPanel>
         </GroupBox>
+        
+        <!-- Anime List -->
+        <GroupBox Header="Anime List"
+                  Padding="5">
+            <ListView x:Name="AnimeList"
+                      Margin="5"
+                      Height="200">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridView.Columns>
+                            <GridViewColumn Header="Id"
+                                            Width="35"
+                                            DisplayMemberBinding="{Binding Id}"/>
+                            <GridViewColumn Header="Title"
+                                            Width="490"
+                                            DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="Type"
+                                            Width="100"
+                                            DisplayMemberBinding="{Binding Type}"/>
+                            <GridViewColumn Header="Episodes"
+                                            Width="100"
+                                            DisplayMemberBinding="{Binding Episodes}"/>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
     </StackPanel>
 </Window>
