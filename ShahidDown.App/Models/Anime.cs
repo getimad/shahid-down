@@ -13,13 +13,22 @@
     }
 
     /// <summary>
+    /// Represents the status of an anime.
+    /// </summary>
+    public enum AnimeStatus
+    {
+        Airing,
+        Completed
+    }
+
+    /// <summary>
     /// Represents an anime.
     /// </summary>
     public class Anime
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required string Title { get; set; }
-        public AnimeType Type { get; set; }
-        public required string Status { get; set; }
+        public required AnimeType Type { get; set; }
+        public required AnimeStatus Status { get; set; }
     }
 }
