@@ -9,6 +9,7 @@
         Tv,
         Movie,
         Ona,
+        Ova,
         Special
     }
 
