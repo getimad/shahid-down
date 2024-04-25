@@ -49,16 +49,16 @@
                         <GridView AllowsColumnReorder="False">
                             <GridView.Columns>
                                 <GridViewColumn Header="Id"
-                                                Width="35"
+                                                Width="40"
                                                 DisplayMemberBinding="{Binding Id}"/>
                                 <GridViewColumn Header="Title"
-                                                Width="295"
+                                                Width="285"
                                                 DisplayMemberBinding="{Binding Title}"/>
                                 <GridViewColumn Header="Type"
-                                                Width="100"
+                                                Width="90"
                                                 DisplayMemberBinding="{Binding Type}"/>
                                 <GridViewColumn Header="Status"
-                                                Width="100"
+                                                Width="90"
                                                 DisplayMemberBinding="{Binding Status}"/>
                             </GridView.Columns>
                         </GridView>
