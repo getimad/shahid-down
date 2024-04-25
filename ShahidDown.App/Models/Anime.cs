@@ -30,5 +30,6 @@
         public required string Title { get; set; }
         public required AnimeType Type { get; set; }
         public required AnimeStatus Status { get; set; }
+        public required string Url { get; set; }
     }
 }
