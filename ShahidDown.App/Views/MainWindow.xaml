@@ -4,27 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShahidDown.App.Views"
+        xmlns:vm="clr-namespace:ShahidDown.App.ViewModels"
+        d:DataContext="{d:DesignInstance Type=vm:AnimeVM}"
         mc:Ignorable="d"
         Title="Shahid Down v1.0" Height="450" Width="900" ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <vm:AnimeVM x:Key="AnimeVM"/>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0"
-                    Margin="10" >
+        <StackPanel DataContext="{StaticResource AnimeVM}"
+                    Grid.Column="0"
+                    Margin="10">
 
             <!--Search-->
             <GroupBox Header="Search"
                       Padding="5">
                 <DockPanel Height="26">
-                    <Button x:Name="SearchButton"
+                    <Button Command="{Binding SearchCommand}"
                             Content="Search"
                             Width="100"
                             Margin="5,0"
                             DockPanel.Dock="Right"/>
-                    <TextBox x:Name="SearchInput"
+                    <TextBox Text="{Binding SearchQuery, Mode=TwoWay}"
                              VerticalContentAlignment="Center"
                              VerticalAlignment="Stretch"
                              Padding="3,0,0,0"/>
@@ -34,7 +42,7 @@
             <!--Anime List-->
             <GroupBox Header="Anime List"
                       Padding="5">
-                <ListView x:Name="AnimeList"
+                <ListView ItemsSource="{Binding AnimeList}"
                           Margin="5"
                           Height="250">
                     <ListView.View>
