@@ -12,17 +12,27 @@ namespace ShahidDown.App.ViewModels.Helpers
         /// Returns a list of anime based on the search query.
         /// </summary>
         /// <param name="query">Represents a search query.</param>
-        public static ObservableCollection<Anime> ScrapAnimeList(string query)
+        public static async Task<List<Anime>> ScrapAnimeListAsync(string query)
         {
-            ObservableCollection<Anime> animeList = [];
+            List<Anime> animeList = [];
 
             int count = 0;
 
             string url = $"{_baseUrl}/?search_param=animes&s={query}";
 
             HtmlWeb web = new();
-            HtmlDocument doc = web.Load(url);
+            HtmlDocument doc = await web.LoadFromWebAsync(url);
             HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[@class='anime-card-container']");
+
+            if (nodes == null)
+            {
+                Anime anime = new()
+                {
+                    Title = "No results found.",
+                };
+
+                return [anime];
+            }
 
             foreach (HtmlNode node in nodes)
             {

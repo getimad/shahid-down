@@ -19,7 +19,7 @@
     public enum AnimeStatus
     {
         Airing,
-        Completed
+        Completed,
     }
 
     /// <summary>
@@ -27,10 +27,10 @@
     /// </summary>
     public class Anime
     {
-        public required int Id { get; set; }
-        public required string Title { get; set; }
-        public required AnimeType Type { get; set; }
-        public required AnimeStatus Status { get; set; }
-        public required string Url { get; set; }
+        public int? Id { get; set; }
+        public string? Title { get; set; }
+        public AnimeType? Type { get; set; }
+        public AnimeStatus? Status { get; set; }
+        public string? Url { get; set; }
     }
 }

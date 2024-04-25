@@ -3,6 +3,7 @@ using ShahidDown.App.ViewModels.Commands;
 using ShahidDown.App.ViewModels.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 
 namespace ShahidDown.App.ViewModels
 {
@@ -20,9 +21,9 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        private ObservableCollection<Anime>? _animeList;
+        private ObservableCollection<Anime> _animeList = [];
 
-        public ObservableCollection<Anime>? AnimeList
+        public ObservableCollection<Anime> AnimeList
         {
             get => _animeList;
             set
@@ -39,13 +40,15 @@ namespace ShahidDown.App.ViewModels
             SearchCommand = new SearchCommand(this);
         }
 
-        public void SearchAnime()
+        public async void SearchAnime()
         {
             // SearchQuery is not null here. If it was null, the Search Button would have been disabled.
 
             SearchQuery = SearchQuery!.Trim();
 
-            AnimeList = new ObservableCollection<Anime>(Scraper.ScrapAnimeList(SearchQuery!));
+            List<Anime> animeList = await Scraper.ScrapAnimeListAsync(SearchQuery!);
+
+            AnimeList = [.. animeList];
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
