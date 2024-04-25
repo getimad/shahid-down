@@ -6,7 +6,11 @@ namespace ShahidDown.App.ViewModels.Commands
     {
         public AnimeVM AnimeVM { get; set; }
 
-        public event EventHandler? CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public SearchCommand(AnimeVM animeVM)
         {
@@ -15,7 +19,8 @@ namespace ShahidDown.App.ViewModels.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return true; // Always return true
+            string? query = parameter as string;
+            return !string.IsNullOrWhiteSpace(query);
         }
 
         public void Execute(object? parameter)

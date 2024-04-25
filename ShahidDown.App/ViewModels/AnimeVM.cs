@@ -41,12 +41,11 @@ namespace ShahidDown.App.ViewModels
 
         public void SearchAnime()
         {
-            if (string.IsNullOrEmpty(SearchQuery))
-            {
-                return;
-            }
+            // SearchQuery is not null here. If it was null, the Search Button would have been disabled.
 
-            AnimeList = new ObservableCollection<Anime>(Scraper.ScrapAnimeList(SearchQuery));
+            SearchQuery = SearchQuery!.Trim();
+
+            AnimeList = new ObservableCollection<Anime>(Scraper.ScrapAnimeList(SearchQuery!));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
