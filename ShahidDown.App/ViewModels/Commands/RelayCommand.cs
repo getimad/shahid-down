@@ -4,10 +4,10 @@ namespace ShahidDown.App.ViewModels.Commands
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
+        private readonly Action<object?> _execute;
+        private readonly Predicate<object?> _canExecute;
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public RelayCommand(Action<object?> execute, Predicate<object?> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
