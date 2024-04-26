@@ -106,8 +106,12 @@
                         </Run>
                     </TextBlock>
                     <TextBlock>
-                        <Run Text="Episodes:"/>
-                        <Run Text="{Binding Episodes}" FontWeight="Medium"/>
+                        <Run Text="Last Episode:"/>
+                        <Run Text="{Binding LastEpisode}" FontWeight="Medium"/>
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Total Episodes:"/>
+                        <Run Text="{Binding TotalEpisodes}" FontWeight="Medium"/>
                     </TextBlock>
                 </StackPanel>
             </GroupBox>

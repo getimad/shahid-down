@@ -7,9 +7,10 @@ namespace ShahidDown.App.ViewModels
     public class AnimeDetailsVM : INotifyPropertyChanged
     {
         private string? _title;
-        private AnimeType? _type;
-        private AnimeStatus? _status;
-        private string? _episodes;
+        private AnimeTypeEnum? _type;
+        private AnimeStatusEnum? _status;
+        private string? _totalepisodes;
+        private string? _lastEpisode;
 
         public string? Title
         {
@@ -21,7 +22,7 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public AnimeType? Type
+        public AnimeTypeEnum? Type
         {
             get => _type;
             set
@@ -31,7 +32,7 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public AnimeStatus? Status
+        public AnimeStatusEnum? Status
         {
             get => _status;
             set
@@ -41,13 +42,23 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public string? Episodes
+        public string? LastEpisode
         {
-            get => _episodes;
+            get => _lastEpisode;
             set
             {
-                _episodes = value;
-                OnPropertyChanged(nameof(Episodes));
+                _lastEpisode = value;
+                OnPropertyChanged(nameof(LastEpisode));
+            }
+        }
+
+        public string? TotalEpisodes
+        {
+            get => _totalepisodes;
+            set
+            {
+                _totalepisodes = value;
+                OnPropertyChanged(nameof(TotalEpisodes));
             }
         }
 
@@ -58,12 +69,13 @@ namespace ShahidDown.App.ViewModels
 
         private void OnItemSelectedCommandExecuted(object data)
         {
-            Anime? anime = data as Anime;
+            AnimeDetails? animeDetails = data as AnimeDetails;
 
-            Title = anime?.Title;
-            Type = anime?.Type;
-            Status = anime?.Status;
-            Episodes = anime?.Episodes;
+            Title = animeDetails?.Title;
+            Type = animeDetails?.Type;
+            Status = animeDetails?.Status;
+            LastEpisode = animeDetails?.LastEpisode;
+            TotalEpisodes = animeDetails?.TotalEpisodes;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
