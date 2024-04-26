@@ -4,6 +4,7 @@ using ShahidDown.App.ViewModels.Commands;
 using ShahidDown.App.ViewModels.Helpers;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ShahidDown.App.ViewModels
@@ -32,6 +33,11 @@ namespace ShahidDown.App.ViewModels
         private async void OnSearchCommandExecuted()
         {
             List<Anime> animeList = await Scraper.ScrapAnimeListAsync(SearchQuery!);
+
+            if (animeList.Count == 0)
+            {
+                MessageBox.Show("No anime found!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
 
             ObservableCollection<Anime> preparedAnimeList = new ObservableCollection<Anime>(animeList);
 
