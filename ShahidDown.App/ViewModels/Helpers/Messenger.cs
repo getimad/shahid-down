@@ -13,14 +13,14 @@
 
         public void Register(string messageName, Action<object> callback)
         {
-            callbacks[messageName] = callback;
+            callbacks.Add(messageName, callback);
         }
 
         public void Send(string messageName, object payload)
         {
-            if (callbacks.ContainsKey(messageName))
+            if (callbacks.TryGetValue(messageName, out Action<object>? callback))
             {
-                callbacks[messageName](payload);
+                callback(payload);
             }
         }
     }
