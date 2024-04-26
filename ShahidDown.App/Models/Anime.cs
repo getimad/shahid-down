@@ -31,6 +31,7 @@
         public string? Title { get; set; }
         public AnimeType? Type { get; set; }
         public AnimeStatus? Status { get; set; }
+        public string? Episodes { get; set; }
         public string? Url { get; set; }
     }
 }

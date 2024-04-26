@@ -1,8 +1,7 @@
 ﻿using HtmlAgilityPack;
 using ShahidDown.App.Models;
-using System.Collections.ObjectModel;
 
-namespace ShahidDown.App.ViewModels.Helpers
+namespace ShahidDown.App.Services
 {
     public static class Scraper
     {
@@ -62,6 +61,41 @@ namespace ShahidDown.App.ViewModels.Helpers
             }
 
             return animeList;
+        }
+
+        /// <summary>
+        /// Returns full information of an anime.
+        /// </summary>
+        /// <param name="anime">Represents Anime object</param>
+        /// <returns></returns>
+        public static async Task<Anime> ScrapAnimeDetailsAsync(Anime anime)
+        {
+            HtmlWeb web = new();
+            HtmlDocument doc = await web.LoadFromWebAsync(anime.Url);
+            HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@class='anime-details']");
+
+            string animeEpisodes = node
+                .SelectSingleNode(".//div[@class='row']/div[4]/div[@class='anime-info']")
+                .InnerText
+                .Trim()
+                .Split("\n")[1];
+
+            if (animeEpisodes == "غير معروف")
+            {
+                animeEpisodes = "N/A";
+            }
+
+            Anime fullAnimeInfo = new()
+            {
+                Id = anime.Id,
+                Title = anime.Title,
+                Type = anime.Type,
+                Status = anime.Status,
+                Episodes = animeEpisodes, // Add episodes to anime object
+                Url = anime.Url
+            };
+
+            return fullAnimeInfo;
         }
     }
 }
