@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using ShahidDown.App.Models;
+using System.Windows;
 
 namespace ShahidDown.App.Services
 {
@@ -25,12 +26,7 @@ namespace ShahidDown.App.Services
 
             if (nodes == null)
             {
-                Anime anime = new()
-                {
-                    Title = "No results found.",
-                };
-
-                return [anime];
+                return [];
             }
 
             foreach (HtmlNode node in nodes)
@@ -52,8 +48,8 @@ namespace ShahidDown.App.Services
                 {
                     Id = count++,
                     Title = animeTitle,
-                    Type = Enum.Parse<AnimeType>(animeType, true),
-                    Status = animeStatus == "مكتمل" ? AnimeStatus.Completed : AnimeStatus.Airing,
+                    Type = Enum.Parse<AnimeTypeEnum>(animeType, true),
+                    Status = animeStatus == "مكتمل" ? AnimeStatusEnum.Completed : AnimeStatusEnum.Airing,
                     Url = animeUrl,
                 };
 
@@ -68,30 +64,32 @@ namespace ShahidDown.App.Services
         /// </summary>
         /// <param name="anime">Represents Anime object</param>
         /// <returns></returns>
-        public static async Task<Anime> ScrapAnimeDetailsAsync(Anime anime)
+        public static async Task<AnimeDetails> ScrapAnimeDetailsAsync(Anime anime)
         {
             HtmlWeb web = new();
             HtmlDocument doc = await web.LoadFromWebAsync(anime.Url);
-            HtmlNode node = doc.DocumentNode.SelectSingleNode("//div[@class='anime-details']");
 
-            string animeEpisodes = node
-                .SelectSingleNode(".//div[@class='row']/div[4]/div[@class='anime-info']")
-                .InnerText
-                .Trim()
-                .Split("\n")[1];
+            // Get the total episodes of the anime.
+            string TotalEpisodesTarget = doc
+                .DocumentNode
+                .SelectSingleNode("//div[@class='anime-details']/div[@class='row']/div[4]/div[@class='anime-info']").InnerText;
+            string animeTotalEpisodes = Helper.GetOnlyDigitsFromString(TotalEpisodesTarget);
 
-            if (animeEpisodes == "غير معروف")
-            {
-                animeEpisodes = "N/A";
-            }
+            // Get the last episode of the anime.
+            string LastEpisodeTarget = doc
+                .DocumentNode
+                .SelectSingleNode("//div[@id='DivEpisodesList']/div[last()]//h3/a")
+                .InnerText;
+            string animeLastEpisode = Helper.GetOnlyDigitsFromString(LastEpisodeTarget);
 
-            Anime fullAnimeInfo = new()
+            AnimeDetails fullAnimeInfo = new()
             {
                 Id = anime.Id,
                 Title = anime.Title,
                 Type = anime.Type,
                 Status = anime.Status,
-                Episodes = animeEpisodes, // Add episodes to anime object
+                LastEpisode = animeLastEpisode,
+                TotalEpisodes = animeTotalEpisodes == string.Empty ? "N/A" : animeTotalEpisodes,
                 Url = anime.Url
             };
 
