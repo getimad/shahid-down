@@ -1,13 +1,10 @@
 ﻿using HtmlAgilityPack;
 using ShahidDown.App.Models;
-using System.Windows;
 
 namespace ShahidDown.App.Services
 {
     public static class Scraper
     {
-        private static readonly string _baseUrl = "https://anime4up.cam";
-
         /// <summary>
         /// Returns a list of anime based on the search query.
         /// </summary>
@@ -18,39 +15,35 @@ namespace ShahidDown.App.Services
 
             int count = 0;
 
-            string url = $"{_baseUrl}/?search_param=animes&s={query}";
+            string searchUrl = Server.GetSearchUrl(query);
 
             HtmlWeb web = new();
-            HtmlDocument doc = await web.LoadFromWebAsync(url);
-            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes("//div[@class='anime-card-container']");
+            HtmlDocument doc = await web.LoadFromWebAsync(searchUrl);
+            HtmlNodeCollection animesNodes = doc
+                .DocumentNode
+                .SelectNodes("//div[@class='search-card']");
 
-            if (nodes == null)
+            if (animesNodes is null)
             {
-                return [];
+                return animeList;
             }
 
-            foreach (HtmlNode node in nodes)
+            foreach (HtmlNode animeNode in animesNodes)
             {
-                string animeTitle = node.SelectSingleNode(
-                    ".//div[@class='anime-card-details']/div[@class='anime-card-title']/h3/a"
-                    ).InnerText;
-                string animeType = node.SelectSingleNode(
-                    ".//div[@class='anime-card-details']/div[@class='anime-card-type']/a"
-                    ).InnerText;
-                string animeStatus = node.SelectSingleNode(
-                    ".//div[@class='anime-card-poster']/div[@class='anime-card-status']/a"
-                    ).InnerText;
-                string animeUrl = node.SelectSingleNode(
-                    ".//div[@class='anime-card-details']/div[@class='anime-card-title']/h3/a"
-                    ).GetAttributeValue("href", string.Empty);
+                string title = GetInnerTextOrDefault(animeNode, ".//a/h3");
+                string type = GetInnerTextOrDefault(animeNode, ".//span[@class='anime-type']");
+                string status = GetInnerTextOrDefault(animeNode, ".//div[@class='anime-status']/a");
+                string episodes = GetInnerTextOrDefault(animeNode, ".//span[@class='anime-aired']", "N/A");
+                string url = GetAttributeValueOrDefault(animeNode, ".//a", "href");
 
-                Anime anime = new()
+                Anime anime = new Anime()
                 {
                     Id = count++,
-                    Title = animeTitle,
-                    Type = Enum.Parse<AnimeTypeEnum>(animeType, true),
-                    Status = animeStatus == "مكتمل" ? AnimeStatusEnum.Completed : AnimeStatusEnum.Airing,
-                    Url = animeUrl,
+                    Title = title,
+                    Type = Cleaner.CleanTypeData(type),
+                    Status = Cleaner.CleanStatusData(status),
+                    Episodes = Cleaner.CleanEpisodeData(episodes),
+                    SubTitleUrl = Cleaner.CleanSubTitleUrl(url)
                 };
 
                 animeList.Add(anime);
@@ -60,40 +53,44 @@ namespace ShahidDown.App.Services
         }
 
         /// <summary>
-        /// Returns full information of an anime.
+        /// Returns more details about specific anime.
         /// </summary>
         /// <param name="anime">Represents Anime object</param>
         /// <returns></returns>
         public static async Task<AnimeDetails> ScrapAnimeDetailsAsync(Anime anime)
         {
             HtmlWeb web = new();
-            HtmlDocument doc = await web.LoadFromWebAsync(anime.Url);
 
-            // Get the total episodes of the anime.
-            string TotalEpisodesTarget = doc
-                .DocumentNode
-                .SelectSingleNode("//div[@class='anime-details']/div[@class='row']/div[4]/div[@class='anime-info']").InnerText;
-            string animeTotalEpisodes = Helper.GetOnlyDigitsFromString(TotalEpisodesTarget);
+            string animeDetailsUrl = Server.GetAnimeUrl(anime.SubTitleUrl);
 
-            // Get the last episode of the anime.
-            string LastEpisodeTarget = doc
-                .DocumentNode
-                .SelectSingleNode("//div[@id='DivEpisodesList']/div[last()]//h3/a")
-                .InnerText;
-            string animeLastEpisode = Helper.GetOnlyDigitsFromString(LastEpisodeTarget);
+            HtmlDocument animeDetailsDoc = await web.LoadFromWebAsync(animeDetailsUrl);
 
-            AnimeDetails fullAnimeInfo = new()
+            string rating = GetInnerTextOrDefault(animeDetailsDoc.DocumentNode, "//span[@class='score']");
+            string myAnimeListUrl = GetAttributeValueOrDefault(animeDetailsDoc.DocumentNode, "//div[@class='external-links']/a[2]", "href");
+
+            AnimeDetails animeDetails = new AnimeDetails()
             {
                 Id = anime.Id,
                 Title = anime.Title,
                 Type = anime.Type,
                 Status = anime.Status,
-                LastEpisode = animeLastEpisode,
-                TotalEpisodes = animeTotalEpisodes == string.Empty ? "N/A" : animeTotalEpisodes,
-                Url = anime.Url
+                Episodes = anime.Episodes,
+                SubTitleUrl = anime.SubTitleUrl,
+                Score = rating,
+                MyAnimeListUrl = myAnimeListUrl
             };
 
-            return fullAnimeInfo;
+            return animeDetails;
+        }
+
+        private static string GetInnerTextOrDefault(HtmlNode node, string xPath, string defaultValue = "Unknown")
+        {
+            return node?.SelectSingleNode(xPath)?.InnerText ?? defaultValue;
+        }
+
+        private static string GetAttributeValueOrDefault(HtmlNode node, string xPath, string attribute, string defaultValue = "Unknown")
+        {
+            return node?.SelectSingleNode(xPath)?.GetAttributeValue(attribute, defaultValue) ?? defaultValue;
         }
     }
 }
