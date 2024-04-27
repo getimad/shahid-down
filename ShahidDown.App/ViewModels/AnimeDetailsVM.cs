@@ -9,8 +9,9 @@ namespace ShahidDown.App.ViewModels
         private string? _title;
         private AnimeTypeEnum? _type;
         private AnimeStatusEnum? _status;
-        private string? _totalepisodes;
-        private string? _lastEpisode;
+        private string? _episodes;
+        private string? _score;
+        private string? _myAnimeListUrl;
 
         public string? Title
         {
@@ -42,25 +43,37 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public string? LastEpisode
+        public string? Episodes
         {
-            get => _lastEpisode;
+            get => _episodes;
             set
             {
-                _lastEpisode = value;
-                OnPropertyChanged(nameof(LastEpisode));
+                _episodes = value;
+                OnPropertyChanged(nameof(Episodes));
             }
         }
 
-        public string? TotalEpisodes
+        public string? Score
         {
-            get => _totalepisodes;
+            get => _score;
             set
             {
-                _totalepisodes = value;
-                OnPropertyChanged(nameof(TotalEpisodes));
+                _score = value;
+                OnPropertyChanged(nameof(Score));
             }
         }
+
+        public string? MyAnimeListUrl
+        {
+            get => _myAnimeListUrl;
+            set
+            {
+                _myAnimeListUrl = value;
+                OnPropertyChanged(nameof(MyAnimeListUrl));
+            }
+        }
+
+
 
         public AnimeDetailsVM()
         {
@@ -74,8 +87,9 @@ namespace ShahidDown.App.ViewModels
             Title = animeDetails?.Title;
             Type = animeDetails?.Type;
             Status = animeDetails?.Status;
-            LastEpisode = animeDetails?.LastEpisode;
-            TotalEpisodes = animeDetails?.TotalEpisodes;
+            Episodes = animeDetails?.Episodes;
+            Score = animeDetails?.Score;
+            MyAnimeListUrl = animeDetails?.MyAnimeListUrl;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
