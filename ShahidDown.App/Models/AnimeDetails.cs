@@ -2,7 +2,7 @@
 {
     public class AnimeDetails : Anime
     {
-        public required string LastEpisode { get; set; }
-        public required string TotalEpisodes { get; set; }
+        public required string Score { get; set; }
+        public required string MyAnimeListUrl { get; set; }
     }
 }

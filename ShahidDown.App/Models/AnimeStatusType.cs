@@ -7,5 +7,6 @@
     {
         Airing,
         Completed,
+        NotYetAired
     }
 }

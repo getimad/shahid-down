@@ -9,6 +9,7 @@
         public required string Title { get; set; }
         public required AnimeTypeEnum Type { get; set; }
         public required AnimeStatusEnum Status { get; set; }
-        public required string Url { get; set; }
+        public required string Episodes { get; set; }
+        public required string SubTitleUrl { get; set; }
     }
 }
