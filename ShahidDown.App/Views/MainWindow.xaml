@@ -106,10 +106,6 @@
                         </Run>
                     </TextBlock>
                     <TextBlock>
-                        <Run Text="Score:" />
-                        <Run Text="{Binding Score}" FontWeight="Medium"/>
-                    </TextBlock>
-                    <TextBlock>
                         <Run Text="Episodes:"/>
                         <Run Text="{Binding Episodes}" FontWeight="Medium"/>
                     </TextBlock>

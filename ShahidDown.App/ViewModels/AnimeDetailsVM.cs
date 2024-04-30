@@ -10,7 +10,6 @@ namespace ShahidDown.App.ViewModels
         private AnimeTypeEnum? _type;
         private AnimeStatusEnum? _status;
         private string? _episodes;
-        private string? _score;
         private string? _myAnimeListUrl;
 
         public string? Title
@@ -53,16 +52,6 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public string? Score
-        {
-            get => _score;
-            set
-            {
-                _score = value;
-                OnPropertyChanged(nameof(Score));
-            }
-        }
-
         public string? MyAnimeListUrl
         {
             get => _myAnimeListUrl;
@@ -72,8 +61,6 @@ namespace ShahidDown.App.ViewModels
                 OnPropertyChanged(nameof(MyAnimeListUrl));
             }
         }
-
-
 
         public AnimeDetailsVM()
         {
@@ -88,7 +75,6 @@ namespace ShahidDown.App.ViewModels
             Type = animeDetails?.Type;
             Status = animeDetails?.Status;
             Episodes = animeDetails?.Episodes;
-            Score = animeDetails?.Score;
             MyAnimeListUrl = animeDetails?.MyAnimeListUrl;
         }
 
