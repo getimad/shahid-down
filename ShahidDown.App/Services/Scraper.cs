@@ -11,39 +11,33 @@ namespace ShahidDown.App.Services
         /// <param name="query">Represents a search query.</param>
         public static async Task<List<Anime>> ScrapAnimeListAsync(string query)
         {
-            List<Anime> animeList = [];
-
-            int count = 0;
-
             string searchUrl = Server.GetSearchUrl(query);
 
             HtmlWeb web = new();
             HtmlDocument doc = await web.LoadFromWebAsync(searchUrl);
-            HtmlNodeCollection animesNodes = doc
-                .DocumentNode
-                .SelectNodes("//div[@class='search-card']");
 
-            if (animesNodes is null)
-            {
-                return animeList;
-            }
+            IEnumerable<HtmlNode> animesNodes = doc
+                .DocumentNode
+                .SelectSingleNode("//div[@class='anime-list-content']/div")
+                .ChildNodes
+                .Elements("div");
+
+            List<Anime> animeList = [];
+
+            int count = 0;
 
             foreach (HtmlNode animeNode in animesNodes)
             {
-                string title = GetInnerTextOrDefault(animeNode, ".//a/h3");
-                string type = GetInnerTextOrDefault(animeNode, ".//span[@class='anime-type']");
-                string status = GetInnerTextOrDefault(animeNode, ".//div[@class='anime-status']/a");
-                string episodes = GetInnerTextOrDefault(animeNode, ".//span[@class='anime-aired']", "N/A");
-                string url = GetAttributeValueOrDefault(animeNode, ".//a", "href");
+                string title = GetInnerTextOrDefault(animeNode, ".//div[@class='anime-card-title']/h3/a");
+                string type = GetInnerTextOrDefault(animeNode, ".//div[@class='anime-card-type']/a");
+                string status = GetInnerTextOrDefault(animeNode, ".//div[@class='anime-card-status']/a");
 
                 Anime anime = new Anime()
                 {
-                    Id = count++,
+                    Id = ++count,
                     Title = title,
                     Type = Cleaner.CleanTypeData(type),
                     Status = Cleaner.CleanStatusData(status),
-                    Episodes = Cleaner.CleanEpisodeData(episodes),
-                    SubTitleUrl = Cleaner.CleanSubTitleUrl(url)
                 };
 
                 animeList.Add(anime);
@@ -61,12 +55,16 @@ namespace ShahidDown.App.Services
         {
             HtmlWeb web = new();
 
-            string animeDetailsUrl = Server.GetAnimeUrl(anime.SubTitleUrl);
+            string url = Server.GetAnimeUrl(anime.UrlFriendlyTitle);
 
-            HtmlDocument animeDetailsDoc = await web.LoadFromWebAsync(animeDetailsUrl);
+            HtmlDocument doc = await web.LoadFromWebAsync(url);
 
-            string rating = GetInnerTextOrDefault(animeDetailsDoc.DocumentNode, "//span[@class='score']");
-            string myAnimeListUrl = GetAttributeValueOrDefault(animeDetailsDoc.DocumentNode, "//div[@class='external-links']/a[2]", "href");
+            string episodes = GetInnerTextOrDefault(doc.DocumentNode, "(//div[@class='anime-info'])[4]");
+
+            string myAnimeListUrl = doc
+                .DocumentNode
+                .SelectSingleNode("//a[@class='anime-mal']")
+                .GetAttributeValue("href", "");
 
             AnimeDetails animeDetails = new AnimeDetails()
             {
@@ -74,23 +72,16 @@ namespace ShahidDown.App.Services
                 Title = anime.Title,
                 Type = anime.Type,
                 Status = anime.Status,
-                Episodes = anime.Episodes,
-                SubTitleUrl = anime.SubTitleUrl,
-                Score = rating,
+                Episodes = Cleaner.CleanEpisodeData(episodes),
                 MyAnimeListUrl = myAnimeListUrl
             };
 
             return animeDetails;
         }
 
-        private static string GetInnerTextOrDefault(HtmlNode node, string xPath, string defaultValue = "Unknown")
+        private static string GetInnerTextOrDefault(HtmlNode node, string xPath)
         {
-            return node?.SelectSingleNode(xPath)?.InnerText ?? defaultValue;
-        }
-
-        private static string GetAttributeValueOrDefault(HtmlNode node, string xPath, string attribute, string defaultValue = "Unknown")
-        {
-            return node?.SelectSingleNode(xPath)?.GetAttributeValue(attribute, defaultValue) ?? defaultValue;
+            return node.SelectSingleNode(xPath)?.InnerText ?? throw new NodeNotFoundException($"Node not found: {nameof(node)}");
         }
     }
 }
