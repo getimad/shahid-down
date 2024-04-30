@@ -5,7 +5,6 @@
     /// </summary>
     public enum AnimeTypeEnum
     {
-        All,
         Tv,
         Movie,
         Ona,

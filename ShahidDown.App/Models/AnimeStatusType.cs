@@ -6,7 +6,6 @@
     public enum AnimeStatusEnum
     {
         Airing,
-        Completed,
-        NotYetAired
+        Completed
     }
 }
