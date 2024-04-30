@@ -23,19 +23,20 @@ namespace ShahidDown.App.Services
             {
                 "يعرض الان" => AnimeStatusEnum.Airing,
                 "مكتمل" => AnimeStatusEnum.Completed,
-                "لم يعرض بعد" => AnimeStatusEnum.NotYetAired,
                 _ => throw new InvalidOperationException($"Invalid status: {input}")
             };
         }
 
         internal static string CleanEpisodeData(string input)
         {
-            return input.Split(' ')[0];
-        }
+            string data = input.Split("\n")[2].Trim();
 
-        internal static string CleanSubTitleUrl(string input)
-        {
-            return input[25..^1];
+            if (data == "غير معروف")
+            {
+                return "N/A";
+            }
+
+            return data;
         }
     }
 }
