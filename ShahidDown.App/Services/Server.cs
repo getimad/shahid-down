@@ -14,7 +14,7 @@
             return $"{_baseUrl}/anime/{animeSubTitleUrl}/";
         }
 
-        internal static string GetEpisodeUrl(string animeSubTitleUrl, string episode)
+        internal static string GetEpisodeUrl(string animeSubTitleUrl, int episode)
         {
             return $"{_baseUrl}/episode/{animeSubTitleUrl}-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-{episode}/";
         }
