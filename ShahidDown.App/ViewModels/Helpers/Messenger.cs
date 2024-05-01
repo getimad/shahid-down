@@ -9,18 +9,24 @@
         private Messenger() { }
         public static Messenger Instance => instance ??= new Messenger();
 
-        private readonly Dictionary<string, Action<object>> callbacks = [];
+        private readonly Dictionary<string, List<Action<object>>> callbacks = [];
 
         public void Register(string messageName, Action<object> callback)
         {
-            callbacks.Add(messageName, callback);
+            if (!callbacks.TryAdd(messageName, [callback]))
+            {
+                callbacks[messageName].Add(callback);
+            } 
         }
 
         public void Send(string messageName, object payload)
         {
-            if (callbacks.TryGetValue(messageName, out Action<object>? callback))
+            if (callbacks.TryGetValue(messageName, out List<Action<object>>? callbackList))
             {
-                callback(payload);
+                foreach (Action<object> callback in callbackList)
+                {
+                    callback(payload);
+                }
             }
         }
     }
