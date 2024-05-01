@@ -113,7 +113,7 @@
             </GroupBox>
             
             <!--Download Anime-->
-            <GroupBox DataContext="{Binding AnimeDownloadVM}"
+            <GroupBox DataContext="{Binding AnimeDownloadVM, Source={StaticResource MainVM}}"
                       Header="Download"
                       Padding="5">
                 <StackPanel>
@@ -128,7 +128,7 @@
                                  VerticalAlignment="Center"
                                  Padding="0,2"/>
                     </DockPanel>
-                    <Button Command="{Binding DownlaodCommand}"
+                    <Button Command="{Binding DownloadCommand}"
                             Content="Download"
                             Margin="0,10,0,0"
                             Height="24"/>
