@@ -11,6 +11,8 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.60" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="Selenium.Support" Version="4.20.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.20.0" />
   </ItemGroup>
 
 </Project>
