@@ -82,14 +82,17 @@ namespace ShahidDown.App.ViewModels
 
             int episode = 1;
 
-            while (true)
+            await Task.Run(async () =>
             {
-                string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, episode);
+                while (true)
+                {
+                    string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, episode);
 
-                downloader.Start(downloadUrl);
+                    downloader.Start(downloadUrl);
 
-                episode++;
-            }
+                    episode++;
+                }
+            });
         }
 
         private void OnDownloadQuery()
