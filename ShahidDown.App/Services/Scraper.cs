@@ -79,6 +79,31 @@ namespace ShahidDown.App.Services
             return animeDetails;
         }
 
+
+        /// <summary>
+        /// Returns download link for specific episode of an anime.
+        /// </summary>
+        /// <param name="anime"></param>
+        /// <param name="episode"></param>
+        /// <returns></returns>
+        public static async Task<string> ScrapDownloadUrlAsync(Anime anime, int episode)
+        {
+            const string SERVER = "MP4Upload"; // Server name
+
+            HtmlWeb web = new();
+
+            string url = Server.GetEpisodeUrl(anime.UrlFriendlyTitle, episode);
+
+            HtmlDocument doc = await web.LoadFromWebAsync(url);
+
+            string downloadLink = doc
+                .DocumentNode
+                .SelectSingleNode($"(//ul[@class='quality-list']/li/a[text()='{SERVER}'])[last()]")
+                .GetAttributeValue("href", null);
+
+            return downloadLink;
+        }
+
         private static string GetInnerTextOrDefault(HtmlNode node, string xPath)
         {
             return node.SelectSingleNode(xPath)?.InnerText ?? throw new NodeNotFoundException($"Node not found: {nameof(node)}");
