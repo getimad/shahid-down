@@ -2,12 +2,7 @@
 using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Commands;
 using ShahidDown.App.ViewModels.Helpers;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ShahidDown.App.ViewModels
@@ -59,6 +54,9 @@ namespace ShahidDown.App.ViewModels
 
         public AnimeDownloadVM()
         {
+            IsAllOptionSelected = true;
+            IsQueryOptionSelected = false;
+
             DownloadCommand = new RelayCommand(param => OnDownloadCommandExecuted(), param => CanExecuteDownloadCommand());
 
             Messenger.Instance.Register(nameof(OnItemSelectedCommandExecuted), OnItemSelectedCommandExecuted);
@@ -75,8 +73,7 @@ namespace ShahidDown.App.ViewModels
 
         private bool CanExecuteDownloadCommand()
         {
-            return (IsAllOptionSelected == true || IsQueryOptionSelected == true)
-                && _selectedAnime != null;
+            return _selectedAnime != null;
         }
 
         private async void OnDownloadAll()
