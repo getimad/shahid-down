@@ -8,12 +8,14 @@
         public AnimeListVM AnimeListVM { get; }
         public AnimeSearchVM AnimeSearchVM { get; }
         public AnimeDetailsVM AnimeDetailsVM { get; }
+        public AnimeDownloadVM AnimeDownloadVM { get; }
 
         public MainVM()
         {
             AnimeDetailsVM = new AnimeDetailsVM();
             AnimeListVM = new AnimeListVM();
             AnimeSearchVM = new AnimeSearchVM();
+            AnimeDownloadVM = new AnimeDownloadVM();
         }
     }
 }
