@@ -1,6 +1,8 @@
 ﻿using ShahidDown.App.Models;
+using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Helpers;
 using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace ShahidDown.App.ViewModels
 {
@@ -67,15 +69,17 @@ namespace ShahidDown.App.ViewModels
             Messenger.Instance.Register(nameof(OnItemSelectedCommandExecuted), OnItemSelectedCommandExecuted);
         }
 
-        private void OnItemSelectedCommandExecuted(object data)
+        private async void OnItemSelectedCommandExecuted(object data)
         {
-            AnimeDetails? animeDetails = data as AnimeDetails;
+            Anime? selectedAnime = data as Anime;
 
-            Title = animeDetails?.Title;
-            Type = animeDetails?.Type;
-            Status = animeDetails?.Status;
-            Episodes = animeDetails?.Episodes;
-            MyAnimeListUrl = animeDetails?.MyAnimeListUrl;
+            AnimeDetails animeDetails = await Scraper.ScrapAnimeDetailsAsync(selectedAnime!);
+
+            Title = animeDetails.Title;
+            Type = animeDetails.Type;
+            Status = animeDetails.Status;
+            Episodes = animeDetails.Episodes;
+            MyAnimeListUrl = animeDetails.MyAnimeListUrl;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

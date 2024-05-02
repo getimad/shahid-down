@@ -47,11 +47,9 @@ namespace ShahidDown.App.ViewModels
             AnimeList = data as ObservableCollection<Anime>;
         }
 
-        private async void OnItemSelectedCommandExecuted()
+        private void OnItemSelectedCommandExecuted()
         {
-            Anime anime = await Scraper.ScrapAnimeDetailsAsync(SelectedAnime!);
-
-            Messenger.Instance.Send(nameof(OnItemSelectedCommandExecuted), anime);
+            Messenger.Instance.Send(nameof(OnItemSelectedCommandExecuted), SelectedAnime!);
         }
 
         private bool CanItemSelectedCommandExecute()
