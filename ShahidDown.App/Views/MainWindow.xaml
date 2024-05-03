@@ -124,6 +124,7 @@
                                      Content="Query:"
                                      VerticalAlignment="Center"/>
                         <TextBox Text="{Binding DownloadQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding IsQueryOptionSelected}"
                                  Margin="6,0,0,0"
                                  VerticalAlignment="Center"
                                  Padding="0,2"/>
