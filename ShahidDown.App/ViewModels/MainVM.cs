@@ -9,6 +9,7 @@
         public AnimeSearchVM AnimeSearchVM { get; }
         public AnimeDetailsVM AnimeDetailsVM { get; }
         public AnimeDownloadVM AnimeDownloadVM { get; }
+        public AboutVM AboutVM { get; }
 
         public MainVM()
         {
@@ -16,6 +17,7 @@
             AnimeListVM = new AnimeListVM();
             AnimeSearchVM = new AnimeSearchVM();
             AnimeDownloadVM = new AnimeDownloadVM();
+            AboutVM = new AboutVM();
         }
     }
 }

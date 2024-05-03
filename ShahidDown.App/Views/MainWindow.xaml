@@ -70,6 +70,27 @@
                     </ListView.View>
                 </ListView>
             </GroupBox>
+
+            <!--About-->
+            <GroupBox DataContext="{Binding AboutVM, Source={StaticResource MainVM}}"
+                      Header="About"
+                      Padding="5">
+                <DockPanel>
+                    <TextBlock Margin="5,0,0,0">
+                        <Hyperlink NavigateUri="{Binding SourceCode}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="RequestNavigate">
+                                    <i:InvokeCommandAction Command="{Binding OpenHyperlinkCommand}"
+                                                           CommandParameter="{Binding SourceCode}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Run Text="Check the source code here."
+                                 FontWeight="Medium"
+                                 FontStyle="Italic"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </DockPanel>
+            </GroupBox>
         </StackPanel>
 
         <StackPanel Grid.Column="1"
