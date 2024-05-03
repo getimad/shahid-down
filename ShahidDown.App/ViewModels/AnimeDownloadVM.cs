@@ -88,7 +88,6 @@ namespace ShahidDown.App.ViewModels
             SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
 
             int episode = 1;
-            int tries = 0;
 
             await Task.Run(async () =>
             {
@@ -101,7 +100,7 @@ namespace ShahidDown.App.ViewModels
                         downloader.Start(downloadUrl);
                     } catch (NodeNotFoundException)
                     {
-                        MessageBox.Show($"Episode {episode - 2}, {episode - 1} and {episode} are not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"Episode {episode} is not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         downloader.Stop();
                         break;
                     }

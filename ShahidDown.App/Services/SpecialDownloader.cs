@@ -6,7 +6,7 @@ namespace ShahidDown.App.Services
 {
     public class SpecialDownloader
     {
-        private WebDriver _driver;
+        private IWebDriver _driver;
         private string _downloadpath;
 
         public SpecialDownloader(string directory)
@@ -18,7 +18,7 @@ namespace ShahidDown.App.Services
             options.AddUserProfilePreference("download.default_directory", _downloadpath);
 
             _driver = new EdgeDriver(options);
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }
 
         public void Start(string url)
