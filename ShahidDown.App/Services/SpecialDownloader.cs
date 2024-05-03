@@ -54,7 +54,7 @@ namespace ShahidDown.App.Services
         {
             string data = string.Join('_', title.Split(' ')[2 ..]);
 
-            return Directory.GetFiles(_downloadpath).Any(f => f.Contains(data));
+            return Directory.GetFiles(_downloadpath, $"*{data}*.mp4").Length > 0;
         }
     }
 }
