@@ -94,10 +94,15 @@ namespace ShahidDown.App.Services
 
             HtmlDocument doc = await web.LoadFromWebAsync(url);
 
-            string downloadLink = doc
+            string? downloadLink = doc
                 .DocumentNode
-                .SelectSingleNode($"(//div[@class='dw-online']/a)[2]")
+                .SelectSingleNode($"(//div[@class='dw-online']/a)[2]")?
                 .GetAttributeValue("href", null);
+
+            if (downloadLink is null)
+            {
+                throw new NodeNotFoundException($"Node not found: {nameof(downloadLink)}");
+            }
 
             return downloadLink;
         }
