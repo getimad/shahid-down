@@ -1,9 +1,11 @@
-﻿using ShahidDown.App.Models;
+﻿using HtmlAgilityPack;
+using ShahidDown.App.Models;
 using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Commands;
 using ShahidDown.App.ViewModels.Helpers;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ShahidDown.App.ViewModels
@@ -78,7 +80,7 @@ namespace ShahidDown.App.ViewModels
 
         private bool CanExecuteDownloadCommand()
         {
-            return _selectedAnime != null;
+            return _selectedAnime != null && (IsAllOptionSelected == true || (IsQueryOptionSelected == true && !string.IsNullOrWhiteSpace(DownloadQuery)));
         }
 
         private async void OnDownloadAll()
@@ -86,14 +88,23 @@ namespace ShahidDown.App.ViewModels
             SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
 
             int episode = 1;
+            int tries = 0;
 
             await Task.Run(async () =>
             {
                 while (true)
                 {
-                    string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, episode);
+                    try
+                    {
+                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, episode);
 
-                    downloader.Start(downloadUrl);
+                        downloader.Start(downloadUrl);
+                    } catch (NodeNotFoundException)
+                    {
+                        MessageBox.Show($"Episode {episode - 2}, {episode - 1} and {episode} are not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        downloader.Stop();
+                        break;
+                    }
 
                     episode++;
                 }
@@ -117,9 +128,17 @@ namespace ShahidDown.App.ViewModels
                 {
                     for (int i = start; i <= end; i++)
                     {
-                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, i);
+                        try
+                        {
+                            string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, i);
 
-                        downloader.Start(downloadUrl);
+                            downloader.Start(downloadUrl);
+                        }
+
+                        catch (NodeNotFoundException)
+                        {
+                            MessageBox.Show($"Episode {i} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                 });
             }
@@ -130,9 +149,16 @@ namespace ShahidDown.App.ViewModels
 
                 await Task.Run(async () =>
                 {
-                    string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, single);
+                    try
+                    {
+                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, single);
 
-                    downloader.Start(downloadUrl);
+                        downloader.Start(downloadUrl);
+
+                    } catch (NodeNotFoundException)
+                    {
+                        MessageBox.Show($"Episode {single} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 });
 
             }
