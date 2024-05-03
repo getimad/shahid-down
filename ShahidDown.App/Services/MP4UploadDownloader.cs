@@ -61,6 +61,11 @@ namespace ShahidDown.App.Services
             }
         }
 
+        public void Stop()
+        {
+            _driver.Quit();
+        }
+
         /// <summary>
         /// Wait for the file to be downloaded.
         /// </summary>
