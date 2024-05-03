@@ -3,6 +3,7 @@ using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Commands;
 using ShahidDown.App.ViewModels.Helpers;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace ShahidDown.App.ViewModels
@@ -45,7 +46,11 @@ namespace ShahidDown.App.ViewModels
             get => _downloadQuery;
             set
             {
-                _downloadQuery = value;
+                if (value is not null)
+                    _downloadQuery = value.Trim();
+                else
+                    _downloadQuery = value;
+
                 OnPropertyChanged(nameof(DownloadQuery));
             }
         }
@@ -93,11 +98,46 @@ namespace ShahidDown.App.ViewModels
                     episode++;
                 }
             });
+
+            downloader.Stop();
         }
 
-        private void OnDownloadQuery()
+        private async void OnDownloadQuery()
         {
+            MP4UploadDownloader downloader = new MP4UploadDownloader();
 
+            Match match = Regex.Match(_downloadQuery!, @"(?<start>\d+)-(?<end>\d+)|(?<single>\d+)");
+
+            if (match.Groups["start"].Success && match.Groups["end"].Success)
+            {
+                int start = int.Parse(match.Groups["start"].Value);
+                int end = int.Parse(match.Groups["end"].Value);
+
+                await Task.Run(async () =>
+                {
+                    for (int i = start; i <= end; i++)
+                    {
+                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, i);
+
+                        downloader.Start(downloadUrl);
+                    }
+                });
+            }
+
+            else if (match.Groups["single"].Success)
+            {
+                int single = int.Parse(match.Groups["single"].Value);
+
+                await Task.Run(async () =>
+                {
+                    string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, single);
+
+                    downloader.Start(downloadUrl);
+                });
+
+            }
+
+            downloader.Stop();
         }
 
         private void OnItemSelectedCommandExecuted(object data)
