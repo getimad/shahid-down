@@ -88,8 +88,6 @@ namespace ShahidDown.App.Services
         /// <returns></returns>
         public static async Task<string> ScrapDownloadUrlAsync(Anime anime, int episode)
         {
-            const string SERVER = "MP4Upload"; // Server name
-
             HtmlWeb web = new();
 
             string url = Server.GetEpisodeUrl(anime.UrlFriendlyTitle, episode);
@@ -98,7 +96,7 @@ namespace ShahidDown.App.Services
 
             string downloadLink = doc
                 .DocumentNode
-                .SelectSingleNode($"(//ul[@class='quality-list']/li/a[text()='{SERVER}'])[last()]")
+                .SelectSingleNode($"(//div[@class='dw-online']/a)[2]")
                 .GetAttributeValue("href", null);
 
             return downloadLink;

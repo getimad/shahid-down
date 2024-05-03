@@ -83,7 +83,7 @@ namespace ShahidDown.App.ViewModels
 
         private async void OnDownloadAll()
         {
-            MP4UploadDownloader downloader = new MP4UploadDownloader();
+            SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
 
             int episode = 1;
 
@@ -104,7 +104,7 @@ namespace ShahidDown.App.ViewModels
 
         private async void OnDownloadQuery()
         {
-            MP4UploadDownloader downloader = new MP4UploadDownloader();
+            SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
 
             Match match = Regex.Match(_downloadQuery!, @"(?<start>\d+)-(?<end>\d+)|(?<single>\d+)");
 
