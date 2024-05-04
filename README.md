@@ -2,7 +2,11 @@
 
 ## Introduction
 
-ShahidDown is a **WPF** desktop application that allows you to download episodes of anime.
+ShahidDown is a **WPF** desktop application that allows you to download episodes of anime with Arabic subtitles.
+
+### Note
+
+- *English Subtitles will be added soon.*
 
 ## Installation
 
@@ -12,7 +16,7 @@ ShahidDown is a **WPF** desktop application that allows you to download episodes
 - Run the application.
 - Enjoy!
 
-### Note:
+### Note
 - *You need to have **.NET +8.0** installed on your machine.*
 - *You can download the application from the [releases]() page.*
 
@@ -23,7 +27,8 @@ ShahidDown is a **WPF** desktop application that allows you to download episodes
 - Select the episode/s you want to download *(you can select multiple episodes by using query `1-5` this will download episodes from 1 to 5)*.
 - Click on the download button.
 
-### Note: 
+### Note
+
 - *You will find the downloaded episodes in the folder where the application is located.*
 
 ## Screenshots
