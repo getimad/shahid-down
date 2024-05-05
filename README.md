@@ -32,8 +32,8 @@ ShahidDown is a **WPF** desktop application that allows you to download episodes
 > *You will find the downloaded episodes in the folder where the application is located inside `/Anime` folder.*
 
 ## Screenshots
+![shahid-down-v1.0.0](https://github.com/getimad/shahid-down/assets/107067409/d5857d30-2115-46f1-867f-0ae5bdaf50b6)
 
-> *The screenshots will added soon.*
 
 ## Contributing
 
