@@ -18,7 +18,7 @@ ShahidDown is a **WPF** desktop application that allows you to download episodes
 
 ### Note
 - *You need to have **.NET +8.0** installed on your machine.*
-- *You can download the application from the [releases]() page.*
+- *You can download the application from the [releases](https://github.com/getimad/shahid-down/releases) page.*
 
 ## Steps: To Use the Application
 
