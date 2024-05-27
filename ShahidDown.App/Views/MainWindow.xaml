@@ -46,8 +46,8 @@
                           SelectedItem="{Binding SelectedAnime}"
                           Height="250">
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                            <i:InvokeCommandAction Command="{Binding SelectedCommand}" CommandParameter="{Binding SelectedAnime}"/>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding OpenAnimeItemWindowCommand}" CommandParameter="{Binding SelectedAnime}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <ListView.View>
