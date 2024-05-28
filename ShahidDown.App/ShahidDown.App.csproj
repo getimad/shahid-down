@@ -9,7 +9,7 @@
 	<Company>getimad.me</Company>
 	<Authors>Imad Ez-zahi</Authors>
     <Description>Shahid Down is a free desktop application that allows you to download episodes of Anime with Arabic subtitles.</Description>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
