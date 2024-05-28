@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:MainVM}"
         mc:Ignorable="d"
-        Title="Shahid Down v1.0.0" Height="450" Width="600" ResizeMode="CanMinimize">
+        Title="Shahid Down v1.0.0" Height="470" Width="600" ResizeMode="CanMinimize">
 
     <Window.Resources>
         <vm:MainVM x:Key="MainVM"/>
@@ -35,33 +35,41 @@
         <!--Anime List-->
         <GroupBox DataContext="{Binding AnimeListVM, Source={StaticResource MainVM}}" Header="Anime List"
                       Padding="5">
-            <ListView ItemsSource="{Binding AnimeList}"
+            <StackPanel>
+                <ListView ItemsSource="{Binding AnimeList}"
                           SelectedItem="{Binding SelectedAnime}"
                           Height="250">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding OpenAnimeItemWindowCommand}" CommandParameter="{Binding SelectedAnime}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridView.Columns>
-                            <GridViewColumn Header="Id"
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding OpenAnimeItemWindowCommand}" CommandParameter="{Binding SelectedAnime}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridView.Columns>
+                                <GridViewColumn Header="Id"
                                                 Width="40"
                                                 DisplayMemberBinding="{Binding Id}"/>
-                            <GridViewColumn Header="Title"
+                                <GridViewColumn Header="Title"
                                                 Width="285"
                                                 DisplayMemberBinding="{Binding Title}"/>
-                            <GridViewColumn Header="Type"
+                                <GridViewColumn Header="Type"
                                                 Width="90"
                                                 DisplayMemberBinding="{Binding Type}"/>
-                            <GridViewColumn Header="Status"
+                                <GridViewColumn Header="Status"
                                                 Width="90"
                                                 DisplayMemberBinding="{Binding Status}"/>
-                        </GridView.Columns>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <DockPanel Margin="0,5,0,0">
+                    <TextBlock>
+                        <Run Text="Total:"/>
+                        <Run Text="{Binding Total}" FontWeight="Medium"/>
+                    </TextBlock>
+                </DockPanel>
+            </StackPanel>
         </GroupBox>
 
         <!--About-->

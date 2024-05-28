@@ -12,6 +12,7 @@ namespace ShahidDown.App.ViewModels
     {
         private ObservableCollection<Anime>? _animeList;
         private Anime? _selectedAnime;
+        private int _total;
 
         public ObservableCollection<Anime>? AnimeList
         {
@@ -33,6 +34,16 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
+        public int Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
+                OnPropertyChanged(nameof(Total));
+            }
+        }
+
         public ICommand OpenAnimeItemWindowCommand { get; }
 
         public AnimeListVM()
@@ -45,6 +56,7 @@ namespace ShahidDown.App.ViewModels
         private void OnSearchCommandExecuted(object data)
         {
             AnimeList = data as ObservableCollection<Anime>;
+            Total = AnimeList?.Count ?? 0;
         }
 
         private void OnOpenAnimeItemWindowCommandExecuted()

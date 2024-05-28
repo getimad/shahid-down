@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:AnimeItemVM}"
         mc:Ignorable="d"
-        Title="Anime" Height="450" Width="900" ResizeMode="CanMinimize">
+        Title="Anime" Height="470" Width="900" ResizeMode="CanMinimize">
 
     <Window.Resources>
         <vm:AnimeItemVM x:Key="AnimeItemVM"/>
