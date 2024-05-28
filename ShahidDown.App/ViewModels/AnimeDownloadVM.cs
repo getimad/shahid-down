@@ -66,7 +66,7 @@ namespace ShahidDown.App.ViewModels
 
             DownloadCommand = new RelayCommand(param => OnDownloadCommandExecuted(), param => CanExecuteDownloadCommand());
 
-            Messenger.Instance.Register(nameof(OnItemSelectedCommandExecuted), OnItemSelectedCommandExecuted);
+            Messenger.Instance.Register(nameof(OnOpenAnimeItemWindowCommandExecuted), OnOpenAnimeItemWindowCommandExecuted);
         }
 
         private void OnDownloadCommandExecuted()
@@ -165,7 +165,7 @@ namespace ShahidDown.App.ViewModels
             downloader.Stop();
         }
 
-        private void OnItemSelectedCommandExecuted(object data)
+        private void OnOpenAnimeItemWindowCommandExecuted(object data)
         {
             _selectedAnime = data as Anime;
         }

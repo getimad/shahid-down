@@ -33,15 +33,12 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
-        public ICommand SelectedCommand { get; }
-
         public ICommand OpenAnimeItemWindowCommand { get; }
 
         public AnimeListVM()
         {
             Messenger.Instance.Register(nameof(OnSearchCommandExecuted), OnSearchCommandExecuted);
 
-            SelectedCommand = new RelayCommand(param => OnItemSelectedCommandExecuted(), param => CanItemSelectedCommandExecute());
             OpenAnimeItemWindowCommand = new RelayCommand(param => OnOpenAnimeItemWindowCommandExecuted(), param => CanOpenAnimeItemWindowCommandExecute());
         }
 
@@ -50,20 +47,12 @@ namespace ShahidDown.App.ViewModels
             AnimeList = data as ObservableCollection<Anime>;
         }
 
-        private void OnItemSelectedCommandExecuted()
-        {
-            Messenger.Instance.Send(nameof(OnItemSelectedCommandExecuted), SelectedAnime!);
-        }
-
-        private bool CanItemSelectedCommandExecute()
-        {
-            return SelectedAnime != null;
-        }
-
         private void OnOpenAnimeItemWindowCommandExecuted()
         {
             AnimeItemWindow animeItemWindow = new AnimeItemWindow();
-            animeItemWindow.ShowDialog();
+            animeItemWindow.Show();
+
+            Messenger.Instance.Send(nameof(OnOpenAnimeItemWindowCommandExecuted), SelectedAnime!);
         }
 
         private bool CanOpenAnimeItemWindowCommandExecute()

@@ -2,7 +2,6 @@
 using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Helpers;
 using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace ShahidDown.App.ViewModels
 {
@@ -66,10 +65,10 @@ namespace ShahidDown.App.ViewModels
 
         public AnimeDetailsVM()
         {
-            Messenger.Instance.Register(nameof(OnItemSelectedCommandExecuted), OnItemSelectedCommandExecuted);
+            Messenger.Instance.Register(nameof(OnOpenAnimeItemWindowCommandExecuted), OnOpenAnimeItemWindowCommandExecuted);
         }
 
-        private async void OnItemSelectedCommandExecuted(object data)
+        private async void OnOpenAnimeItemWindowCommandExecuted(object data)
         {
             Anime? selectedAnime = data as Anime;
 
