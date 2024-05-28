@@ -4,9 +4,95 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShahidDown.App.Views"
+        xmlns:vm="clr-namespace:ShahidDown.App.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        d:DataContext="{d:DesignInstance Type=vm:AnimeItemVM}"
         mc:Ignorable="d"
-        Title="Anime" Height="450" Width="800">
-    <Grid>
-        
+        Title="Anime" Height="450" Width="900" ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <vm:AnimeItemVM x:Key="AnimeItemVM"/>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <!--Anime Details-->
+        <GroupBox DataContext="{Binding AnimeDetailsVM, Source={StaticResource AnimeItemVM}}"
+                  Header="Anime Details"
+                  Padding="5"
+                  Grid.Column="0"
+                  Grid.Row="0">
+            <StackPanel>
+                <TextBlock TextTrimming="CharacterEllipsis">
+                    <Run Text="Title:"/>
+                    <Run Text="{Binding Title}" FontWeight="Medium"/>
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="Type:"/>
+                    <Run Text="{Binding Type}" FontWeight="Medium"/>
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="Status:"/>
+                    <Run Text="{Binding Status}" FontWeight="Medium">
+                        <Run.Style>
+                            <Style TargetType="Run">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                        <Setter Property="Foreground" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Airing">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Run.Style>
+                    </Run>
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="Episodes:"/>
+                    <Run Text="{Binding Episodes}" FontWeight="Medium"/>
+                </TextBlock>
+            </StackPanel>
+        </GroupBox>
+
+        <!--Download Anime-->
+        <GroupBox DataContext="{Binding AnimeDownloadVM, Source={StaticResource AnimeItemVM}}"
+                  Header="Download Episodes"
+                  Padding="5"
+                  Margin="10,0,0,0"
+                  Grid.Column="1" 
+                  Grid.Row="0">
+            <StackPanel>
+                <RadioButton IsChecked="{Binding IsAllOptionSelected, Mode=TwoWay}" GroupName="download-option"
+                             Content="All."/>
+                <DockPanel Margin="0,6,0,0">
+                    <RadioButton IsChecked="{Binding IsQueryOptionSelected, Mode=TwoWay}" GroupName="download-option"
+                                 Content="Query:"
+                                 VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding DownloadQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsQueryOptionSelected}"
+                             Margin="6,0,0,0"
+                             VerticalAlignment="Center"
+                             Padding="0,2"/>
+                </DockPanel>
+                <Button Command="{Binding DownloadCommand}"
+                        Content="Download"
+                        Margin="0,10,0,0"
+                        Height="24"/>
+                <TextBlock Text="*Please select an anime to download."
+                           Margin="0,5,0,0"
+                           FontStyle="Italic"
+                           Foreground="Gray"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>

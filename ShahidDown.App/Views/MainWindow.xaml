@@ -8,75 +8,68 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:MainVM}"
         mc:Ignorable="d"
-        Title="Shahid Down v1.0.0" Height="450" Width="900" ResizeMode="CanMinimize">
+        Title="Shahid Down v1.0.0" Height="450" Width="600" ResizeMode="CanMinimize">
 
     <Window.Resources>
         <vm:MainVM x:Key="MainVM"/>
     </Window.Resources>
-    
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0">
-
-            <!--Search-->
-            <GroupBox DataContext="{Binding AnimeSearchVM, Source={StaticResource MainVM}}" Header="Search"
+    <StackPanel Margin="10">
+        <!--Search-->
+        <GroupBox DataContext="{Binding AnimeSearchVM, Source={StaticResource MainVM}}" Header="Search"
                       Padding="5">
-                <DockPanel Height="26">
-                    <Button Command="{Binding SearchCommand}"
+            <DockPanel Height="26">
+                <Button Command="{Binding SearchCommand}"
                             CommandParameter="{Binding SearchQuery}"
                             Content="Search"
                             Width="100"
                             Margin="5,0,0,0"
                             DockPanel.Dock="Right"/>
-                    <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              VerticalAlignment="Stretch"
                              Padding="3,0,0,0"/>
-                </DockPanel>
-            </GroupBox>
+            </DockPanel>
+        </GroupBox>
 
-            <!--Anime List-->
-            <GroupBox DataContext="{Binding AnimeListVM, Source={StaticResource MainVM}}" Header="Anime List"
+        <!--Anime List-->
+        <GroupBox DataContext="{Binding AnimeListVM, Source={StaticResource MainVM}}" Header="Anime List"
                       Padding="5">
-                <ListView ItemsSource="{Binding AnimeList}"
+            <ListView ItemsSource="{Binding AnimeList}"
                           SelectedItem="{Binding SelectedAnime}"
                           Height="250">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding OpenAnimeItemWindowCommand}" CommandParameter="{Binding SelectedAnime}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="False">
-                            <GridView.Columns>
-                                <GridViewColumn Header="Id"
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding OpenAnimeItemWindowCommand}" CommandParameter="{Binding SelectedAnime}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridView.Columns>
+                            <GridViewColumn Header="Id"
                                                 Width="40"
                                                 DisplayMemberBinding="{Binding Id}"/>
-                                <GridViewColumn Header="Title"
+                            <GridViewColumn Header="Title"
                                                 Width="285"
                                                 DisplayMemberBinding="{Binding Title}"/>
-                                <GridViewColumn Header="Type"
+                            <GridViewColumn Header="Type"
                                                 Width="90"
                                                 DisplayMemberBinding="{Binding Type}"/>
-                                <GridViewColumn Header="Status"
+                            <GridViewColumn Header="Status"
                                                 Width="90"
                                                 DisplayMemberBinding="{Binding Status}"/>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </GroupBox>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
 
-            <!--About-->
-            <GroupBox DataContext="{Binding AboutVM, Source={StaticResource MainVM}}"
+        <!--About-->
+        <GroupBox DataContext="{Binding AboutVM, Source={StaticResource MainVM}}"
                       Header="About"
                       Padding="5">
-                <DockPanel>
-                    <TextBlock Margin="5,0,0,0">
+            <DockPanel>
+                <TextBlock Margin="5,0,0,0">
                         <Hyperlink NavigateUri="{Binding SourceCode}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="RequestNavigate">
@@ -88,78 +81,8 @@
                                  FontWeight="Medium"
                                  FontStyle="Italic"/>
                         </Hyperlink>
-                    </TextBlock>
-                </DockPanel>
-            </GroupBox>
-        </StackPanel>
-
-        <StackPanel Grid.Column="1"
-                    Margin="10,0,0,0">
-            
-            <!--Anime Details-->
-            <GroupBox DataContext="{Binding AnimeDetailsVM, Source={StaticResource MainVM}}"
-                      Header="Anime Details"
-                      Padding="5">
-                <StackPanel>
-                    <TextBlock TextTrimming="CharacterEllipsis">
-                        <Run Text="Title:"/>
-                        <Run Text="{Binding Title}" FontWeight="Medium"/>
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Type:"/>
-                        <Run Text="{Binding Type}" FontWeight="Medium"/>
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Status:"/>
-                        <Run Text="{Binding Status}" FontWeight="Medium">
-                            <Run.Style>
-                                <Style TargetType="Run">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Status}" Value="Completed">
-                                            <Setter Property="Foreground" Value="Blue"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Airing">
-                                            <Setter Property="Foreground" Value="Green"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Run.Style>
-                        </Run>
-                    </TextBlock>
-                    <TextBlock>
-                        <Run Text="Episodes:"/>
-                        <Run Text="{Binding Episodes}" FontWeight="Medium"/>
-                    </TextBlock>
-                </StackPanel>
-            </GroupBox>
-            
-            <!--Download Anime-->
-            <GroupBox DataContext="{Binding AnimeDownloadVM, Source={StaticResource MainVM}}"
-                      Header="Download Episodes"
-                      Padding="5">
-                <StackPanel>
-                    <RadioButton IsChecked="{Binding IsAllOptionSelected, Mode=TwoWay}" GroupName="download-option"
-                                 Content="All."/>
-                    <DockPanel Margin="0,6,0,0">
-                        <RadioButton IsChecked="{Binding IsQueryOptionSelected, Mode=TwoWay}" GroupName="download-option"
-                                     Content="Query:"
-                                     VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding DownloadQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 IsEnabled="{Binding IsQueryOptionSelected}"
-                                 Margin="6,0,0,0"
-                                 VerticalAlignment="Center"
-                                 Padding="0,2"/>
-                    </DockPanel>
-                    <Button Command="{Binding DownloadCommand}"
-                            Content="Download"
-                            Margin="0,10,0,0"
-                            Height="24"/>
-                    <TextBlock Text="*Please select an anime to download."
-                               Margin="0,5,0,0"
-                               FontStyle="Italic"
-                               Foreground="Gray"/>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-    </Grid>
+                </TextBlock>
+            </DockPanel>
+        </GroupBox>
+    </StackPanel>
 </Window>
