@@ -4,11 +4,11 @@ using System.IO;
 namespace ShahidDown.App.Services
 {
     /// <summary>
-    /// This class is the Special Downloader automation.
+    /// This class is the Mp4Upload Downloader automation.
     /// </summary>
     /// <param name="directoryName"></param>
     /// <param name="downloadpath"></param>
-    public class SpecialDownloader(WebController web) : IBaseDownloader
+    public class Mp4UploadDownloader(WebController web) : IBaseDownloader
     {
         public string DownloadPath { get; } = web.DownloadPath;
 
@@ -16,13 +16,15 @@ namespace ShahidDown.App.Services
 
         public void Start(string url)
         {
-            string title = DownloadDriver.FindElement(By.XPath("//h2")).Text;
+            string title = DownloadDriver.FindElement(By.XPath("//h4")).Text;
 
             if (!IsFileExist(title))
             {
-                DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/button")).Click();
+                DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Click();
 
-                DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/a")).Click();
+                Thread.Sleep(30_000);
+
+                DownloadDriver.FindElement(By.XPath("//button[@id='downloadbtn']")).Click();
 
                 WaitForFileDownload(title);
             }
@@ -32,7 +34,7 @@ namespace ShahidDown.App.Services
         {
             DownloadDriver.Navigate().GoToUrl(url);
 
-            return DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/button")).Displayed;
+            return DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Displayed;
         }
 
         public void Stop()
@@ -50,9 +52,7 @@ namespace ShahidDown.App.Services
 
         public bool IsFileExist(string title)
         {
-            string data = string.Join('_', title.Split(' ')[2 ..]);
-
-            return Directory.GetFiles(DownloadPath, $"*{data}*.mp4").Length > 0;
+            return Directory.GetFiles(DownloadPath, title).Length > 0;
         }
     }
 }
