@@ -85,7 +85,7 @@ namespace ShahidDown.App.ViewModels
 
         private async void OnDownloadAll()
         {
-            SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
 
             int episode = 1;
 
@@ -95,13 +95,11 @@ namespace ShahidDown.App.ViewModels
                 {
                     try
                     {
-                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, episode);
-
-                        downloader.Start(downloadUrl);
-                    } catch (NodeNotFoundException)
+                        await DownloadProcess(episode, webController);
+                    }
+                    catch (NodeNotFoundException)
                     {
-                        MessageBox.Show($"Episode {episode} is not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        downloader.Stop();
+                        MessageBox.Show($"The episode N°{episode} is not found. Or the download process reached to the end.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                         break;
                     }
 
@@ -109,13 +107,11 @@ namespace ShahidDown.App.ViewModels
                 }
             });
 
-            downloader.Stop();
+            webController.Dispose();
         }
 
         private async void OnDownloadQuery()
         {
-            SpecialDownloader downloader = new SpecialDownloader(_selectedAnime!.UrlFriendlyTitle);
-
             Match match = Regex.Match(_downloadQuery!, @"(?<start>\d+)-(?<end>\d+)|(?<single>\d+)");
 
             if (match.Groups["start"].Success && match.Groups["end"].Success)
@@ -123,51 +119,97 @@ namespace ShahidDown.App.ViewModels
                 int start = int.Parse(match.Groups["start"].Value);
                 int end = int.Parse(match.Groups["end"].Value);
 
-                await Task.Run(async () =>
-                {
-                    for (int i = start; i <= end; i++)
-                    {
-                        try
-                        {
-                            string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, i);
-
-                            downloader.Start(downloadUrl);
-                        }
-
-                        catch (NodeNotFoundException)
-                        {
-                            MessageBox.Show($"Episode {i} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-                });
+                await OnDownloadQueryRange(start, end);
             }
 
             else if (match.Groups["single"].Success)
             {
                 int single = int.Parse(match.Groups["single"].Value);
 
-                await Task.Run(async () =>
+                await OnDownloadQuerySingle(single);
+            }
+            
+            else
+            {
+                MessageBox.Show("Invalid query format. Please enter something like '4-11' or '5'.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task OnDownloadQuerySingle(int episode)
+        {
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
+
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    await DownloadProcess(episode, webController);
+                }
+                catch (NodeNotFoundException)
+                {
+                    MessageBox.Show($"Episode N°{episode} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
+
+            webController.Dispose();
+        }
+
+        private async Task OnDownloadQueryRange(int start, int end)
+        {
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
+
+            await Task.Run(async () =>
+            {
+                for (int episode = start; episode <= end; episode++)
                 {
                     try
                     {
-                        string downloadUrl = await Scraper.ScrapDownloadUrlAsync(_selectedAnime!, single);
-
-                        downloader.Start(downloadUrl);
-
-                    } catch (NodeNotFoundException)
-                    {
-                        MessageBox.Show($"Episode {single} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await DownloadProcess(episode, webController);
                     }
-                });
+                    catch (NodeNotFoundException)
+                    {
+                        MessageBox.Show($"Episode N°{episode} not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            });
 
+            webController.Dispose();
+        }
+
+        private async Task DownloadProcess(int episode, WebController webController)
+        {
+            List<DownloadLink> links = await Scraper.ScrapDownloadUrlsAsync(_selectedAnime!, episode);
+
+            if (links.Count == 0)
+            {
+                MessageBox.Show($"Sorry, There is no download server for episode N°{episode}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            downloader.Stop();
+            foreach (DownloadLink link in links)
+            {
+                IBaseDownloader downloader = CreateDownloader(link.Type, webController);
+
+                if (downloader.CanStart(link.Url))
+                {
+                    downloader.Start(link.Url);
+                    break;
+                }
+            }
         }
 
         private void OnOpenAnimeItemWindowCommandExecuted(object data)
         {
             _selectedAnime = data as Anime;
+        }
+
+        private IBaseDownloader CreateDownloader(DownloadLinkTypeEnum type, WebController webController)
+        {
+            return type switch
+            {
+                DownloadLinkTypeEnum.Special => new SpecialDownloader(webController),
+                DownloadLinkTypeEnum.MP4Upload => new Mp4UploadDownloader(webController),
+                _ => throw new NotImplementedException()
+            };
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
