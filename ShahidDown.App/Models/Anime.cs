@@ -13,9 +13,9 @@ namespace ShahidDown.App.Models
         public required AnimeStatusEnum Status { get; set; }
         public string UrlFriendlyTitle
         {
-            get => Regex.Replace(Title, @"[^0-9a-zA-Z\s-]", "")
+            get => Regex.Replace(Title.ToLower(), @"[^0-9a-z\s\.-]", "")
                         .Replace(" ", "-")
-                        .ToLower();
+                        .Replace(".", "-");
         }
     }
 }
