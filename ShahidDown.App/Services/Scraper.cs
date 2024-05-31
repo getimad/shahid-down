@@ -81,12 +81,12 @@ namespace ShahidDown.App.Services
 
 
         /// <summary>
-        /// Returns download link for specific episode of an anime.
+        /// Returns downloads link for specific episode of an anime.
         /// </summary>
         /// <param name="anime"></param>
         /// <param name="episode"></param>
         /// <returns></returns>
-        public static async Task<string> ScrapDownloadUrlAsync(Anime anime, int episode)
+        public static async Task<List<DownloadLink>> ScrapDownloadUrlsAsync(Anime anime, int episode)
         {
             HtmlWeb web = new();
 
@@ -94,17 +94,73 @@ namespace ShahidDown.App.Services
 
             HtmlDocument doc = await web.LoadFromWebAsync(url);
 
-            string? downloadLink = doc
+            if (IsPageNotFound(doc))
+                throw new NodeNotFoundException("Page not found.");
+
+            List<DownloadLink> downloadLinks = [];
+
+            DownloadLink? specialDownloadLink = GetSpecialDownloadink(doc);
+
+            if (specialDownloadLink is not null)
+                downloadLinks.Add(specialDownloadLink);
+
+            downloadLinks.AddRange(GetDownloadLinks(doc));
+
+            return downloadLinks;
+        }
+
+        private static bool IsPageNotFound(HtmlDocument doc)
+        {
+            return doc.DocumentNode.SelectSingleNode($"//div[@class='page-404']") is not null;
+        }
+
+        private static DownloadLink? GetSpecialDownloadink(HtmlDocument doc)
+        {
+            string? specialDownloadLink = doc
                 .DocumentNode
                 .SelectSingleNode($"(//div[@class='dw-online']/a)[2]")?
                 .GetAttributeValue("href", null);
 
-            if (downloadLink is null)
+            if (specialDownloadLink is null)
             {
-                throw new NodeNotFoundException($"Node not found: {nameof(downloadLink)}");
+                return null;
             }
 
-            return downloadLink;
+            return new DownloadLink()
+            {
+                Type = DownloadLinkTypeEnum.Special,
+                Url = specialDownloadLink
+            };
+        }
+
+        private static List<DownloadLink> GetDownloadLinks(HtmlDocument doc)
+        {
+            IEnumerable<HtmlNode> downloadNodes = doc
+                .DocumentNode
+                .SelectSingleNode("(//ul[@class='quality-list'])[last()]")
+                .ChildNodes
+                .Elements("a");
+
+            List<DownloadLink> downloadLinks = [];
+
+            foreach (HtmlNode downloadNode in downloadNodes)
+            {
+                string downloadType = downloadNode.InnerText;
+                string downloadLink = downloadNode.GetAttributeValue("href", "");
+
+                if (Enum.TryParse(downloadType, true, out DownloadLinkTypeEnum type))
+                {
+                    DownloadLink link = new DownloadLink()
+                    {
+                        Type = type,
+                        Url = downloadLink
+                    };
+
+                    downloadLinks.Add(link);
+                }
+            }
+
+            return downloadLinks;
         }
 
         private static string GetInnerTextOrDefault(HtmlNode node, string xPath)
