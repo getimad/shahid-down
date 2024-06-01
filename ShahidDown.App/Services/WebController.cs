@@ -20,10 +20,6 @@ namespace ShahidDown.App.Services
 
             DownloadDriver = new EdgeDriver(options);
             DownloadDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);  // This will wait for 10 seconds if the element is not found.
-
-            Thread.Sleep(3_000);  // Wait for the extension to load.
-
-            DownloadDriver.Navigate().Refresh();  // Refresh the page to apply the extension.
         }
 
         public void Dispose()

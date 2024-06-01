@@ -16,6 +16,10 @@ namespace ShahidDown.App.Services
 
         public void Start(string url)
         {
+            Thread.Sleep(3_000);
+
+            DownloadDriver.Navigate().Refresh();  // Refresh the page to apply the extension.
+
             string title = DownloadDriver.FindElement(By.XPath("//h4")).Text;
 
             if (!IsFileExist(title))
@@ -34,7 +38,11 @@ namespace ShahidDown.App.Services
         {
             DownloadDriver.Navigate().GoToUrl(url);
 
-            return DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Displayed;
+            try
+            {
+                return DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Displayed;
+            }
+            catch { return false; }
         }
 
         public void Stop()

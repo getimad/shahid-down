@@ -99,7 +99,7 @@ namespace ShahidDown.App.Services
 
             List<DownloadLink> downloadLinks = [];
 
-            DownloadLink? specialDownloadLink = GetSpecialDownloadink(doc);
+            DownloadLink? specialDownloadLink = GetSpecialDownloadLink(doc);
 
             if (specialDownloadLink is not null)
                 downloadLinks.Add(specialDownloadLink);
@@ -114,7 +114,7 @@ namespace ShahidDown.App.Services
             return doc.DocumentNode.SelectSingleNode($"//div[@class='page-404']") is not null;
         }
 
-        private static DownloadLink? GetSpecialDownloadink(HtmlDocument doc)
+        private static DownloadLink? GetSpecialDownloadLink(HtmlDocument doc)
         {
             string? specialDownloadLink = doc
                 .DocumentNode
@@ -153,6 +153,17 @@ namespace ShahidDown.App.Services
                     DownloadLink link = new DownloadLink()
                     {
                         Type = type,
+                        Url = downloadLink
+                    };
+
+                    downloadLinks.Add(link);
+                }
+
+                if (downloadType == "updown" || downloadType == "uupbom" || downloadType == "upbaam")
+                {
+                    DownloadLink link = new DownloadLink()
+                    {
+                        Type = DownloadLinkTypeEnum.XFileSharing,
                         Url = downloadLink
                     };
 
