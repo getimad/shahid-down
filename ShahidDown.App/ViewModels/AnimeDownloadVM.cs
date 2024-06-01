@@ -208,6 +208,7 @@ namespace ShahidDown.App.ViewModels
             {
                 DownloadLinkTypeEnum.Special => new SpecialDownloader(webController),
                 DownloadLinkTypeEnum.MP4Upload => new Mp4UploadDownloader(webController),
+                DownloadLinkTypeEnum.XFileSharing => new XFileSharingDownloader(webController),
                 _ => throw new NotImplementedException()
             };
         }

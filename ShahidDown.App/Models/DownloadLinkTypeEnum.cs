@@ -4,5 +4,6 @@
     {
         Special,
         MP4Upload,
+        XFileSharing,
     }
 }
