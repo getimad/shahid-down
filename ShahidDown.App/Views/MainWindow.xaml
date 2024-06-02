@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=vm:MainVM}"
         mc:Ignorable="d"
-        Title="Shahid Down v1.0.1" Height="470" Width="600" ResizeMode="CanMinimize">
+        Title="Shahid Down v1.1.0" Height="470" Width="600" ResizeMode="CanMinimize">
 
     <Window.Resources>
         <vm:MainVM x:Key="MainVM"/>
