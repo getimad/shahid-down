@@ -21,21 +21,23 @@ ShahidDown is a **WPF** desktop application that allows you to download episodes
 > *You can download the application from the [releases](https://github.com/getimad/shahid-down/releases) page.*
 
 ## Screenshots
-![shahid-down-v1.0.1-main](https://github.com/getimad/shahid-down/assets/107067409/fb29db6c-f7b6-4533-97cc-291c4fa1ab01)
 
-This is the main window of the app.
+1. This is the main window of the app.
 
-![shahid-down-v1.0.0-anime](https://github.com/getimad/shahid-down/assets/107067409/b06187ac-c393-469a-ba11-1817488a80a4)
+![shahid-down-v1.1.0-main](https://github.com/getimad/shahid-down/assets/107067409/4578d18a-9100-4f28-a38f-fcf95a6a9bfe)
 
-When you double click on the anime item, new window popup for downloading section.
 
+2. When you double click on the anime item, new window popup for downloading section.
+
+![shahid-down-v1.0.0-anime](https://github.com/getimad/shahid-down/assets/107067409/736d960b-7124-45d7-99a0-136b639e2b78)
 
 ## Steps: To Use the Application
 
 1. Search for available anime, it includes more than +1500 anime and movies.
 2. Double click on the anime you want to download.
-3. Select the episode/s you want to download *(you can select multiple episodes by using query `1-5` this will download episodes from 1 to 5)*.
-4. Click on the download button.
+3. Set the download path of the anime.
+4. Select the episode/s you want to download *(you can select multiple episodes by using query `1-5` this will download episodes from 1 to 5)*.
+5. Click on the download button.
 
 ### Note
 
