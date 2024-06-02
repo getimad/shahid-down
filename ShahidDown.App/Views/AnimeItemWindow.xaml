@@ -72,6 +72,7 @@
                   Grid.Column="1" 
                   Grid.Row="0">
             <StackPanel>
+                <!-- Download Path -->
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Download Path"
                                FontWeight="SemiBold"
@@ -82,11 +83,13 @@
                                  VerticalAlignment="Center"
                                  Padding="0,2"
                                  Width="350"/>
-                        <Button Content="..."
+                        <Button Command="{Binding SetDownloadPathCommand}" 
+                                Content="..."
                                 Margin="6,0,0,0"
                                 Height="22"/>
                     </DockPanel>
                 </StackPanel>
+                <!-- Download Methods -->
                 <StackPanel Margin="0,0,0,10">
                     <TextBlock Text="Download Methods"
                                VerticalAlignment="Center"

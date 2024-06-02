@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.Win32;
 using ShahidDown.App.Models;
 using ShahidDown.App.Services;
 using ShahidDown.App.ViewModels.Commands;
@@ -13,6 +14,7 @@ namespace ShahidDown.App.ViewModels
     public class AnimeDownloadVM : INotifyPropertyChanged
     {
         private Anime? _selectedAnime;
+        private string? _downlaodPath;
         private bool? _isAllOptionSelected;
         private bool? _isQueryOptionSelected;
         private string? _downloadQuery;
@@ -57,7 +59,19 @@ namespace ShahidDown.App.ViewModels
             }
         }
 
+        public string? DownloadPath
+        {
+            get => _downlaodPath;
+            set
+            {
+                _downlaodPath = value;
+
+                OnPropertyChanged(nameof(DownloadPath));
+            }
+        }
+
         public ICommand? DownloadCommand { get; }
+        public ICommand? SetDownloadPathCommand { get; }
 
         public AnimeDownloadVM()
         {
@@ -65,8 +79,27 @@ namespace ShahidDown.App.ViewModels
             IsQueryOptionSelected = false;
 
             DownloadCommand = new RelayCommand(param => OnDownloadCommandExecuted(), param => CanExecuteDownloadCommand());
+            SetDownloadPathCommand = new RelayCommand(param => SetDownloadPathCommandExecuted(), param => CanExecuteSetDownloadPathCommand());
 
             Messenger.Instance.Register(nameof(OnOpenAnimeItemWindowCommandExecuted), OnOpenAnimeItemWindowCommandExecuted);
+        }
+
+        private void SetDownloadPathCommandExecuted()
+        {
+            OpenFolderDialog openFolderDialog = new()
+            {
+                Title = "Select Download Path",
+            };
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                DownloadPath = openFolderDialog.FolderName;
+            }
+        }
+
+        private bool CanExecuteSetDownloadPathCommand()
+        {
+            return true;
         }
 
         private void OnDownloadCommandExecuted()
@@ -85,7 +118,7 @@ namespace ShahidDown.App.ViewModels
 
         private async void OnDownloadAll()
         {
-            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle, DownloadPath);
 
             int episode = 1;
 
@@ -137,7 +170,7 @@ namespace ShahidDown.App.ViewModels
 
         private async Task OnDownloadQuerySingle(int episode)
         {
-            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle, DownloadPath);
 
             await Task.Run(async () =>
             {
@@ -156,7 +189,7 @@ namespace ShahidDown.App.ViewModels
 
         private async Task OnDownloadQueryRange(int start, int end)
         {
-            WebController webController = new(_selectedAnime!.UrlFriendlyTitle);
+            WebController webController = new(_selectedAnime!.UrlFriendlyTitle, DownloadPath);
 
             await Task.Run(async () =>
             {
