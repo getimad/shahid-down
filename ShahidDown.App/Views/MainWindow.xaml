@@ -28,7 +28,13 @@
                 <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              VerticalAlignment="Stretch"
-                             Padding="3,0,0,0"/>
+                             Padding="3,0,0,0">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter"
+                                    Command="{Binding SearchCommand}"
+                                    CommandParameter="{Binding SearchQuery}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
             </DockPanel>
         </GroupBox>
 
