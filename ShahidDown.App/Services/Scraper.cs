@@ -97,14 +97,12 @@ namespace ShahidDown.App.Services
             if (IsPageNotFound(doc))
                 throw new NodeNotFoundException("Page not found.");
 
-            List<DownloadLink> downloadLinks = [];
+            List<DownloadLink> downloadLinks = GetDownloadLinks(doc);
 
             DownloadLink? specialDownloadLink = GetSpecialDownloadLink(doc);
 
             if (specialDownloadLink is not null)
                 downloadLinks.Add(specialDownloadLink);
-
-            downloadLinks.AddRange(GetDownloadLinks(doc));
 
             return downloadLinks;
         }

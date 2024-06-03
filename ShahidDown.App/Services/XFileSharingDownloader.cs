@@ -35,19 +35,20 @@ namespace ShahidDown.App.Services
 
             string title = DownloadDriver.FindElement(By.XPath("//span[@class='dfilename']")).Text;
 
-            if (!IsFileExist(title))
+            if (IsFileExist(title))
+                throw new Exception("File already exists.");
+
+
+            DownloadDriver.FindElement(By.Id("downloadbtn")).Click();
+
+            try
             {
-                DownloadDriver.FindElement(By.Id("downloadbtn")).Click();
-
-                try
-                {
-                    // Because there are many xFileSharing sites, and some of them have a direct link to the file.
-                    DownloadDriver.FindElement(By.XPath("//span[@id='direct_link']/a")).Click();
-                }
-                catch { }
-
-                WaitForFileDownload(title);
+                // Because there are many xFileSharing sites, and some of them have a direct link to the file.
+                DownloadDriver.FindElement(By.XPath("//span[@id='direct_link']/a")).Click();
             }
+            catch { }
+
+            WaitForFileDownload(title);
         }
 
         public void Stop()

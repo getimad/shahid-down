@@ -222,9 +222,16 @@ namespace ShahidDown.App.ViewModels
             {
                 IBaseDownloader downloader = CreateDownloader(link.Type, webController);
 
-                if (downloader.CanStart(link.Url))
+                try
                 {
-                    downloader.Start(link.Url);
+                    if (downloader.CanStart(link.Url))
+                    {
+                        downloader.Start(link.Url);
+                        break;
+                    }
+                }
+                catch
+                {
                     break;
                 }
             }

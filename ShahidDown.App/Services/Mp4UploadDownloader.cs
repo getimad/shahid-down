@@ -22,16 +22,16 @@ namespace ShahidDown.App.Services
 
             string title = DownloadDriver.FindElement(By.XPath("//h4")).Text;
 
-            if (!IsFileExist(title))
-            {
-                DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Click();
+            if (IsFileExist(title))
+                throw new Exception("File already exists.");
 
-                Thread.Sleep(30_000);
+            DownloadDriver.FindElement(By.XPath("//input[@type='submit']")).Click();
 
-                DownloadDriver.FindElement(By.XPath("//button[@id='downloadbtn']")).Click();
+            Thread.Sleep(30_000);
 
-                WaitForFileDownload(title);
-            }
+            DownloadDriver.FindElement(By.XPath("//button[@id='downloadbtn']")).Click();
+
+            WaitForFileDownload(title);
         }
 
         public bool CanStart(string url)

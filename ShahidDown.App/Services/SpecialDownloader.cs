@@ -18,14 +18,14 @@ namespace ShahidDown.App.Services
         {
             string title = DownloadDriver.FindElement(By.XPath("//h2")).Text;
 
-            if (!IsFileExist(title))
-            {
-                DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/button")).Click();
+            if (IsFileExist(title))
+                throw new Exception("File already exists.");
 
-                DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/a")).Click();
+            DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/button")).Click();
 
-                WaitForFileDownload(title);
-            }
+            DownloadDriver.FindElement(By.XPath("//div[@class='v-card-text']/a")).Click();
+
+            WaitForFileDownload(title);
         }
 
         public bool CanStart(string url)
