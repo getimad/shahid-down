@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using System.IO;
 
@@ -14,11 +15,11 @@ namespace ShahidDown.App.Services
             DownloadPath = Path.Combine(downloadpath ?? Directory.GetCurrentDirectory(), directoryName);
             Directory.CreateDirectory(DownloadPath);
 
-            EdgeOptions options = new EdgeOptions();
+            ChromeOptions options = new ChromeOptions();
             options.AddExtension(Path.Combine(Directory.GetCurrentDirectory(), "Extensions", "uBlock_v1_57_2.crx"));
             options.AddUserProfilePreference("download.default_directory", DownloadPath);
 
-            DownloadDriver = new EdgeDriver(options);
+            DownloadDriver = new ChromeDriver(options);
             DownloadDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);  // This will wait for 10 seconds if the element is not found.
         }
 
